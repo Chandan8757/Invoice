@@ -1,25 +1,47 @@
-import logo from './logo.svg';
+// App.js
+import React, { useState } from 'react';
+import InvoiceForm from './components/InvoiceForm';
+import InvoicePreview from './components/InvoicePreview';
 import './App.css';
 
-function App() {
+const App = () => {
+  const [invoice, setInvoice] = useState({
+    customerName: '',
+    customerAddress: '',
+    customerEmail: '',
+    invoiceNumber: '',
+    date: '',
+    dueDate: '',
+    billFrom: 'Your Company Name\n123 Business St\nCity, State, ZIP\nEmail: info@yourcompany.com\nPhone: (123) 456-7890',
+    note: 'Thank you for your business!',
+    currency: 'USD',
+    lineItems: [],
+  });
+
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setInvoice({ ...invoice, [name]: value });
+  };
+
+  const handleAddLineItem = (lineItem) => {
+    setInvoice({ ...invoice, lineItems: [...invoice.lineItems, lineItem] });
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="invoice-container">
+      <h1>Automatic Invoice Generator</h1>
+      <div className="invoice-form">
+        <InvoiceForm
+          onAddLineItem={handleAddLineItem}
+          onFormChange={handleFormChange}
+          invoice={invoice}
+        />
+      </div>
+      <div className="invoice-preview">
+        <InvoicePreview invoice={invoice} />
+      </div>
     </div>
   );
-}
+};
 
 export default App;
